@@ -2,15 +2,18 @@ import os
 import pandas as pd
 import mlflow
 import mlflow.sklearn
-
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+from sklearn.utils import resample
 
+# Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "student_activity_processed.csv")
 
+# Load data
 df = pd.read_csv(DATA_PATH)
+
 FEATURES = [
     "login_count",
     "avg_session_duration_min",
@@ -27,13 +30,37 @@ FEATURES = [
     "consistency_score"
 ]
 
+TARGET_COL = "burnout_flag"
+
 X = df[FEATURES]
-y = df["burnout_flag"]
+y = df[TARGET_COL]
+
 print("FULL DATASET LABELS")
 print(y.value_counts())
+
+# Split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, stratify=y, random_state=42
 )
+
+# Upsample minority class
+train_data = pd.concat([X_train, y_train], axis=1)
+majority = train_data[train_data[TARGET_COL] == 0]
+minority = train_data[train_data[TARGET_COL] == 1]
+
+minority_upsampled = resample(
+    minority,
+    replace=True,
+    n_samples=len(majority),
+    random_state=42
+)
+
+train_balanced = pd.concat([majority, minority_upsampled])
+
+X_train_bal = train_balanced[FEATURES]
+y_train_bal = train_balanced[TARGET_COL]
+
+# MLflow
 mlflow.set_experiment("academic_burnout_prediction")
 
 with mlflow.start_run():
@@ -43,30 +70,23 @@ with mlflow.start_run():
         random_state=42
     )
 
-    model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
-y_prob = model.predict_proba(X_test)
+    model.fit(X_train_bal, y_train_bal)
 
-if y_prob.shape[1] == 2:
-    y_prob = y_prob[:, 1]
-else:
-    raise ValueError("Model trained with single class. Check target labels.")
+    y_pred = model.predict(X_test)
+    y_prob = model.predict_proba(X_test)[:, 1]
 
-acc = accuracy_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred)
-auc = roc_auc_score(y_test, y_prob)
-mlflow.log_params({
-    "model_type": "RandomForest",
-    "n_estimators": 100,
-    "max_depth": 6
-})
+    mlflow.log_params({
+        "model_type": "RandomForest",
+        "n_estimators": 100,
+        "max_depth": 6
+    })
 
-mlflow.log_metrics({
-    "accuracy": acc,
-    "f1_score": f1,
-    "roc_auc": auc
-})
+    mlflow.log_metrics({
+        "accuracy": accuracy_score(y_test, y_pred),
+        "f1_score": f1_score(y_test, y_pred),
+        "roc_auc": roc_auc_score(y_test, y_prob)
+    })
 
-mlflow.sklearn.log_model(model, "model")
-print(y_train.value_counts())
+    mlflow.sklearn.log_model(model, "model")
 
+print("Training complete. Metrics logged to MLflow.")

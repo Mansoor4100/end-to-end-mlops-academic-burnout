@@ -1,0 +1,23 @@
+artifact_path: file:C:/My AIML Pro/end-to-end-mlops-academic-burnout/mlruns/1/models/m-018c6fb5d9684a35971a52b4fcc24ad1/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.5
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.9.0
+model_id: m-018c6fb5d9684a35971a52b4fcc24ad1
+model_size_bytes: 249455
+model_uuid: m-018c6fb5d9684a35971a52b4fcc24ad1
+prompts: null
+run_id: 2564bcfb21a64ccf80d2c2c4f9691c86
+utc_time_created: '2026-01-31 15:51:34.653977'
