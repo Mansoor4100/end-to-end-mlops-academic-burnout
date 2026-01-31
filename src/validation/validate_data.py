@@ -21,19 +21,24 @@ if missing_cols:
 
 if extra_cols:
     print(f"Warning: Extra columns detected: {extra_cols}")
-type_mapping = {
-    "integer": ["int64", "int32"],
-    "float": ["float64", "float32"],
-    "string": ["object"],
-    "category": ["object"]
-}
+from pandas.api.types import (
+    is_integer_dtype,
+    is_float_dtype,
+    is_string_dtype
+)
 
 for col, props in schema["columns"].items():
     expected_type = props["type"]
-    actual_type = str(df[col].dtype)
 
-    if not any(t in actual_type for t in type_mapping[expected_type]):
-        raise TypeError(f"Column {col} expected {expected_type}, got {actual_type}")
+    if expected_type == "integer" and not is_integer_dtype(df[col]):
+        raise TypeError(f"Column {col} expected integer")
+
+    if expected_type == "float" and not is_float_dtype(df[col]):
+        raise TypeError(f"Column {col} expected float")
+
+    if expected_type in ["string", "category"] and not is_string_dtype(df[col]):
+        raise TypeError(f"Column {col} expected string/category")
+
 null_cols = df.columns[df.isnull().any()].tolist()
 if null_cols:
     raise ValueError(f"Null values found in columns: {null_cols}")
