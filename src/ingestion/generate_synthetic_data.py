@@ -21,6 +21,14 @@ for student_id in range(1, NUM_STUDENTS + 1):
         avg_session = max(5, np.random.normal(45, 10))
         forum_posts = np.random.poisson(1)
 
+        # ✅ Burnout logic (behavior-based)
+        burnout_flag = 1 if (
+            login_count <= 3 and
+            avg_session < 35 and
+            forum_posts == 0 and
+            np.random.rand() < 0.9
+        ) else 0
+
         data.append({
             "student_id": f"S{student_id:04d}",
             "date": date.date(),
@@ -48,12 +56,15 @@ for student_id in range(1, NUM_STUDENTS + 1):
             "focus_decay_score": np.random.uniform(0, 1),
             "consistency_score": np.random.uniform(0, 1),
 
-            "burnout_risk_label": "low",
-            "burnout_flag": 0
+            "burnout_risk_label": "high" if burnout_flag == 1 else "low",
+            "burnout_flag": burnout_flag
         })
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-RAW_DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
-os.makedirs(RAW_DATA_DIR, exist_ok=True)
+
+# ✅ Ensure directory exists (important for Windows + CI)
+os.makedirs("data/raw", exist_ok=True)
+
 df = pd.DataFrame(data)
-output_path = os.path.join(RAW_DATA_DIR, "student_activity_raw.csv")
-df.to_csv(output_path, index=False)
+df.to_csv("data/raw/student_activity_raw.csv", index=False)
+
+print("Dataset generated successfully")
+print(df["burnout_flag"].value_counts())
