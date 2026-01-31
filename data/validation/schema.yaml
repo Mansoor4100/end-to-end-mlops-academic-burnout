@@ -1,0 +1,56 @@
+dataset_name: academic_burnout_behavioral_data
+
+columns:
+  student_id:
+    type: string
+  date:
+    type: date
+  week_no:
+    type: integer
+  semester_phase:
+    type: category
+
+  login_count:
+    type: integer
+  avg_session_duration_min:
+    type: float
+  inactive_days_streak:
+    type: integer
+  forum_posts:
+    type: integer
+  resources_accessed:
+    type: integer
+
+  assignments_due:
+    type: integer
+  assignments_submitted:
+    type: integer
+  submission_delay_hours:
+    type: float
+  late_submission_ratio_7d:
+    type: float
+  time_to_start_assignment_hr:
+    type: float
+
+  late_night_activity_ratio:
+    type: float
+  weekend_activity_ratio:
+    type: float
+  session_variance_7d:
+    type: float
+  study_time_trend_7d:
+    type: float
+
+  engagement_drop_pct_14d:
+    type: float
+  focus_decay_score:
+    type: float
+  consistency_score:
+    type: float
+
+  burnout_risk_label:
+    type: category
+  burnout_flag:
+    type: integer
+
+target_column: burnout_flag
