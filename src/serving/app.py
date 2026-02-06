@@ -1,12 +1,11 @@
 
 import os
-import mlflow
-import mlflow.sklearn
+
 import numpy as np
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 import joblib
-import mlflow.sklearn
+
 from src.db.database import SessionLocal
 from src.db.crud import save_prediction
 from src.schema.student_activity import StudentActivity  # ✅ correct import
