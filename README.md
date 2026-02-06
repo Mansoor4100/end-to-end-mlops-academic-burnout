@@ -1,93 +1,184 @@
-Early Warning System for Academic Burnout (End-to-End MLOps Project)
-Project Overview
+🎓 Academic Burnout Prediction System
 
-Academic burnout is a growing but often undetected problem in higher education and online learning platforms. Students rarely fail suddenly; instead, their engagement and study behavior degrade gradually over time.
+End-to-End Machine Learning & MLOps Project
 
-This project aims to build an end-to-end MLOps pipeline that predicts academic burnout risk 2–3 weeks in advance using behavioral engagement signals from learning platforms. The system enables early intervention before performance drops or students disengage completely.
+📌 Project Overview
 
-Problem Statement
+The Academic Burnout Prediction System is an end-to-end machine learning application designed to predict student burnout risk based on behavioral and engagement metrics.
+The project follows real-world MLOps practices, covering model training, evaluation, inference API development, data persistence, visualization, and cloud deployment.
 
-Most existing academic analytics systems rely heavily on grades and attendance, which act as lagging indicators. By the time these signals change, burnout has already occurred.
+This system helps educational institutions identify at-risk students early and take preventive actions.
 
-The objective of this project is to design a proactive burnout prediction system using non-academic behavioral data such as login patterns, assignment submission delays, engagement consistency, and temporal usage trends.
+🧠 Problem Statement
 
-Key Objectives
+Academic burnout is often caused by:
 
-Predict student burnout risk early using behavioral data
+Prolonged inactivity
 
-Build a production-grade ML pipeline following MLOps best practices
+Late submissions
 
-Enable automated training, evaluation, deployment, and monitoring
+Reduced engagement
 
-Detect data and concept drift in student behavior
+Irregular learning patterns
 
-Support continuous retraining as new data arrives
+Manual identification is difficult and error-prone.
+This project automates burnout risk detection using machine learning + analytics dashboards.
 
-Proposed Solution
+🏗️ System Architecture
+Student Activity Data
+        ↓
+ML Model (Scikit-Learn)
+        ↓
+FastAPI Inference Service
+        ↓
+SQLite Database (Predictions)
+        ↓
+Streamlit Dashboard (Charts & Trends)
 
-The system ingests daily student activity data from a learning platform and generates a burnout risk score (low, medium, high) for each student.
-Predictions are served via a REST API and monitored continuously for performance degradation and data drift.
+⚙️ Tech Stack
+🔹 Machine Learning
 
-Planned Tech Stack
+Python
 
-Language: Python
+Scikit-Learn
 
-Data Processing: Pandas, NumPy
+NumPy
 
-Machine Learning: Scikit-learn
+Pandas
 
-Experiment Tracking: MLflow
+Imbalanced data handling
 
-Data Versioning: DVC
+Probabilistic classification
 
-API: FastAPI
+🔹 MLOps & Backend
 
-Containerization: Docker
+FastAPI (Inference API)
 
-CI/CD: GitHub Actions
+Joblib (Model serialization)
 
-Monitoring: Custom drift & performance checks
+SQLite (Prediction storage)
 
-Project Structure
-data/           # Raw and processed datasets
-notebooks/      # EDA and experimentation notebooks
-src/            # Core ML and pipeline logic
-api/            # Model serving API
-pipelines/      # Training and inference pipelines
-configs/        # Configuration files
-tests/          # Unit and integration tests
-models/         # Registered models
-.github/        # CI/CD workflows
+SQLAlchemy (ORM)
 
-Dataset Description (Planned)
+Alembic (DB migrations)
 
-Granularity: One row per student per day
+🔹 Experiment Tracking
 
-Data Type: Synthetic behavioral data (privacy-safe)
+MLflow (training & evaluation phase only)
 
-Target Variable: Burnout risk level
+🔹 Visualization
 
-Features: Engagement metrics, temporal patterns, behavioral trends
+Streamlit
 
-Current Status
+Interactive charts & trends
 
-✅ Project initialized
-✅ Problem defined
-⏳ Data generation and validation (in progress)
+🔹 Deployment
 
-Future Work
+FastAPI → Render
 
-Synthetic data generation and validation
+Streamlit Dashboard → Streamlit Cloud
 
-Feature engineering and model training
+📊 Features
 
-Model registry and versioning
+✔ Predict burnout probability
+✔ Binary burnout classification
+✔ Store predictions in database
+✔ Visualize trends and statistics
+✔ Modular & scalable project structure
+✔ Cloud-ready deployment
 
-API deployment
+📂 Project Structure
+end-to-end-mlops-academic-burnout/
+│
+├── src/
+│   ├── serving/
+│   │   ├── app.py              # FastAPI app
+│   │   ├── model.pkl           # Trained ML model
+│   │
+│   ├── db/
+│   │   ├── database.py
+│   │   ├── models.py
+│   │   ├── crud.py
+│   │
+│   ├── schema/
+│   │   └── student_activity.py
+│
+├── streamlit_dashboard.py
+├── requirements.txt
+├── README.md
 
-Monitoring, drift detection, and automated retraining
+🔌 API Usage
+Health Check
+GET /
 
-Author
+Predict Burnout
+POST /predict
+
+Request Body
+{
+  "login_count": 0,
+  "avg_session_duration_min": 5,
+  "inactive_days_streak": 15,
+  "forum_posts": 0,
+  "resources_accessed": 0,
+  "assignments_due": 5,
+  "assignments_submitted": 0,
+  "submission_delay_hours": 48,
+  "late_submission_ratio_7d": 1,
+  "late_night_activity_ratio": 0.9,
+  "weekend_activity_ratio": 0.8,
+  "engagement_drop_pct_14d": 0.9,
+  "consistency_score": 0.1
+}
+
+Response
+{
+  "burnout_probability": 0.725,
+  "burnout_prediction": 1
+}
+
+📈 Streamlit Dashboard
+
+The Streamlit dashboard provides:
+
+Burnout probability distribution
+
+Prediction history
+
+Trend analysis
+
+Interactive analytics
+
+🚀 Deployment
+FastAPI (Render)
+
+Production inference API
+
+Auto-scaling enabled
+
+Streamlit (Streamlit Cloud)
+
+Public dashboard access
+
+Real-time visualizations
+
+🧪 Model Details
+
+Classification model trained with imbalance handling
+
+Outputs probability + binary prediction
+
+Threshold-based classification (≥ 0.5 → Burnout)
+
+🎯 Learning Outcomes
+
+End-to-end ML pipeline design
+Practical MLOps workflow
+Model serving in production
+Cloud deployment
+Data visualization for ML insights
+
+📌 Author
 
 Shaik Nabi Mansoor
-
+Machine Learning & MLOps Enthusiast
