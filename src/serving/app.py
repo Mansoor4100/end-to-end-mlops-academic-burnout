@@ -1,9 +1,12 @@
+
+import os
 import mlflow
 import mlflow.sklearn
 import numpy as np
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
-
+import joblib
+import mlflow.sklearn
 from src.db.database import SessionLocal
 from src.db.crud import save_prediction
 from src.schema.student_activity import StudentActivity  # ✅ correct import
@@ -13,8 +16,11 @@ app = FastAPI(
     version="1.0"
 )
 
-MODEL_URI = "runs:/c3c34880bde24306a3a9d87436d985e8/model"
-model = mlflow.sklearn.load_model(MODEL_URI)
+
+
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.pkl")
+model = joblib.load(MODEL_PATH)
+
 
 
 # -------------------------
