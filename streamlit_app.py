@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # =========================
 # CONFIG
 # =========================
-API_URL = "http://localhost:8000/predict"   # change after deployment
+API_URL = "https://end-to-end-mlops-academic-burnout.onrender.com/predict"   # change after deployment
 DB_PATH = "burnout.db"
 
 st.set_page_config(
